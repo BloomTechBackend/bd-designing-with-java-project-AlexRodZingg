@@ -15,6 +15,18 @@ public class WeightedCostStrategy implements CostStrategy {
         this.weightedStrategiesMap = weightedStrategiesMap;
     }
 
+    @Override
+    public ShipmentCost getCost(ShipmentOption shipmentOption) {
+
+        BigDecimal cost = BigDecimal.ZERO;
+        for (Map.Entry<CostStrategy, BigDecimal> anEntry : weightedStrategiesMap.entrySet()) {
+            ShipmentCost entryCost = anEntry.getKey().getCost(shipmentOption);
+            cost.add(entryCost.getCost().multiply(anEntry.getValue()));
+        }
+
+        return new ShipmentCost(shipmentOption, cost);
+    }
+
     // Builder static inner class
     public static class Builder {
         private Map<CostStrategy, BigDecimal> weightedStrategiesMap = new HashMap<>();
@@ -27,17 +39,5 @@ public class WeightedCostStrategy implements CostStrategy {
         public WeightedCostStrategy build() {
             return new WeightedCostStrategy(weightedStrategiesMap);
         }
-    }
-
-    @Override
-    public ShipmentCost getCost(ShipmentOption shipmentOption) {
-
-        BigDecimal cost = BigDecimal.ZERO;
-        for (Map.Entry<CostStrategy, BigDecimal> anEntry : weightedStrategiesMap.entrySet()) {
-            ShipmentCost entryCost = anEntry.getKey().getCost(shipmentOption);
-            cost.add(entryCost.getCost().multiply(anEntry.getValue()));
-        }
-
-        return new ShipmentCost(shipmentOption, cost);
     }
 }

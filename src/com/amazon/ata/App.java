@@ -7,7 +7,6 @@ import com.amazon.ata.cost.WeightedCostStrategy;
 import com.amazon.ata.dao.PackagingDAO;
 import com.amazon.ata.datastore.PackagingDatastore;
 import com.amazon.ata.service.ShipmentService;
-import com.amazonaws.services.dynamodbv2.xspec.B;
 
 import java.math.BigDecimal;
 

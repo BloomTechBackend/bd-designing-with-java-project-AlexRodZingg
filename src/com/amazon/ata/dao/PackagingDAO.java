@@ -35,7 +35,7 @@ public class PackagingDAO {
                 Set<FcPackagingOption> fcSet = new HashSet<>();
                 fcSet.add(f);
                 fcPackagingOptionsMap.put(f.getFulfillmentCenter(), fcSet);
-            } else { // What if key exists already - retrieve FulfillmentCenter's set, and add the new FcPackagingOption
+            } else {
                 Set<FcPackagingOption> fcSet = fcPackagingOptionsMap.get(f.getFulfillmentCenter());
                 fcSet.add(f);
             }
