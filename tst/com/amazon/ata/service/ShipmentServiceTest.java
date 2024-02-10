@@ -35,6 +35,27 @@ class ShipmentServiceTest {
             new MonetaryCostStrategy());
 
     @Test
+    void findBestShipmentOption_unknownFulfillmentCenter_returnNullFulfillmentCenterAndPackaging() {
+        // GIVEN & WHEN
+        ShipmentOption shipmentOption = shipmentService.findShipmentOption(smallItem, nonExistentFC);
+
+        // THEN
+        assertNull(shipmentOption.getFulfillmentCenter(), "Should have caught UnknownFulfillmentCenterException and return null FulfillmentCenter");
+        assertNull(shipmentOption.getPackaging(), "Should have caught noPackagingFitsItemException and return null Packaging");
+    }
+
+    @Test
+    void findBestShipmentOption_noPackagingFitsItemException_returnFulfillmentCenterAndNullPackaging() {
+        // GIVEN & WHEN
+        ShipmentOption shipmentOption = shipmentService.findShipmentOption(largeItem, existentFC);
+
+        // THEN
+        assertNull(shipmentOption.getPackaging(), "Should have caught noPackagingFitsItemException and return null Packaging");
+        assertEquals(existentFC, shipmentOption.getFulfillmentCenter(), "Should have caught noPackagingFitsItemException and still returned" +
+                "known FulfillmentCenter");
+    }
+
+    @Test
     void findBestShipmentOption_existentFCAndItemCanFit_returnsShipmentOption() {
         // GIVEN & WHEN
         ShipmentOption shipmentOption = shipmentService.findShipmentOption(smallItem, existentFC);
@@ -49,7 +70,7 @@ class ShipmentServiceTest {
         ShipmentOption shipmentOption = shipmentService.findShipmentOption(largeItem, existentFC);
 
         // THEN
-        assertNull(shipmentOption);
+        assertNotNull(shipmentOption);
     }
 
     @Test
@@ -58,7 +79,7 @@ class ShipmentServiceTest {
         ShipmentOption shipmentOption = shipmentService.findShipmentOption(smallItem, nonExistentFC);
 
         // THEN
-        assertNull(shipmentOption);
+        assertNotNull(shipmentOption);
     }
 
     @Test
@@ -67,6 +88,6 @@ class ShipmentServiceTest {
         ShipmentOption shipmentOption = shipmentService.findShipmentOption(largeItem, nonExistentFC);
 
         // THEN
-        assertNull(shipmentOption);
+        assertNotNull(shipmentOption);
     }
 }
